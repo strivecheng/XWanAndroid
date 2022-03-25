@@ -1,0 +1,88 @@
+import com.strive.xwanandroid.buildsrc.Libs
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.strive.xwanandroid"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+//    implementation(project(":core:ui-components:strive-ui-kit-compose"))
+
+    implementation Libs.Coroutines.core
+    implementation Libs.Coroutines.android
+    implementation Libs.Coroutines.serializationJson
+
+    implementation Libs.Koin.android
+
+    implementation Libs.Ktor.android
+    implementation Libs.Ktor.coreJvm
+    implementation Libs.Ktor.logging
+    implementation Libs.Ktor.loggingJvm
+    implementation Libs.Ktor.serialization
+    implementation Libs.slf4j
+    implementation Libs.Coil.coil
+    implementation Libs.Coil.coilCompose
+
+
+
+
+    implementation Libs.AndroidX.browser
+    implementation Libs.AndroidX.Navigation.compose
+    implementation Libs.AndroidX.Compose.ui
+    implementation Libs.AndroidX.Compose.uiTooling
+    implementation Libs.AndroidX.Compose.material
+    implementation Libs.AndroidX.Compose.uiToolingPreview
+    implementation Libs.AndroidX.Lifecycle.lifecycleKtx
+    implementation Libs.AndroidX.activityComposeKtx
+    implementation Libs.Accompanist.systemUiController
+    implementation Libs.Accompanist.insets
+
+    testImplementation Libs.junit
+    testImplementation Libs.extJunit
+    testImplementation Libs.espressoCore
+    testImplementation Libs.AndroidX.Compose.uiTestJunit4
+    testImplementation Libs.AndroidX.Compose.uiTooling
+}
