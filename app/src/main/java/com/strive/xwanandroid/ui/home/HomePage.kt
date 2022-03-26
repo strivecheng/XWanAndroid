@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.strive.xwanandroid.R
 import com.strive.xwanandroid.service.data.dto.ArticleResultDto
 import com.strive.xwanandroid.service.data.dto.HomeBannerResultDto
@@ -53,7 +57,7 @@ fun HomePage(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(color = StriveTheme.colors.background)
     ) {
         Row(
             modifier = Modifier
@@ -88,15 +92,34 @@ fun HomePage(
         val viewState = viewModel.viewState.collectAsState(initial = HomePageViewState.Default)
         when (viewState.value) {
             HomePageViewState.Default -> {}
-            is HomePageViewState.ShowHomeAndData -> {
+            is HomePageViewState.ShowHomeAllData -> {
                 val articleList =
-                    (viewState.value as HomePageViewState.ShowHomeAndData).homeAllDataInfo.homeHotArticleList
+                    (viewState.value as HomePageViewState.ShowHomeAllData).homeAllDataInfo.homeHotArticleList
                 val mutableList: MutableList<ArticleResultDto> = mutableListOf()
-                mutableList.addAll((viewState.value as HomePageViewState.ShowHomeAndData).homeAllDataInfo.homeTopArticleList)
+                mutableList.addAll((viewState.value as HomePageViewState.ShowHomeAllData).homeAllDataInfo.homeTopArticleList)
                 mutableList.addAll(articleList)
-                HomeBanner((viewState.value as HomePageViewState.ShowHomeAndData).homeAllDataInfo.bannerList)
-                HomeArticleList(mutableList)
+                HomeContent(
+                    (viewState.value as HomePageViewState.ShowHomeAllData).homeAllDataInfo.bannerList,
+                    mutableList,
+                    viewModel
+                )
             }
+        }
+    }
+}
+
+@Composable
+private fun HomeContent(
+    bannerList: List<HomeBannerResultDto>, articleList: List<ArticleResultDto>,
+    viewModel: HomeViewModel
+) {
+    val collectAsState by viewModel.isRefreshing.collectAsState()
+    SwipeRefresh(state = rememberSwipeRefreshState(collectAsState), onRefresh = {
+        viewModel.fetchHomeAllData()
+    }) {
+        Column {
+            HomeBanner(bannerList = bannerList)
+            HomeArticleList(articleList = articleList)
         }
     }
 }
@@ -106,6 +129,7 @@ private fun HomeBanner(bannerList: List<HomeBannerResultDto>) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
+            .background(StriveTheme.colors.background)
             .padding(20.dp)
             .height(120.dp)
     ) {
@@ -116,10 +140,13 @@ private fun HomeBanner(bannerList: List<HomeBannerResultDto>) {
 }
 
 @Composable
-private fun HomeArticleList(articleList: List<ArticleResultDto>) {
+private fun HomeArticleList(
+    articleList: List<ArticleResultDto>,
+) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
+            .background(StriveTheme.colors.background)
     ) {
         items(articleList) {
             ArticleItem(it)

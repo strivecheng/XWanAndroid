@@ -94,6 +94,14 @@ object Libs {
                 "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha05"
         }
 
+        object Paging {
+            const val version = "3.1.1"
+            const val composeVersion = "1.0.0-alpha15"
+            const val runtime = "androidx.paging:paging-runtime:$version"
+            const val common = "androidx.paging:paging-common:$version"
+            const val compose = "androidx.paging:paging-compose:$composeVersion"
+        }
+
 
         //WorkManager
         const val workManager = "androidx.work:work-runtime-ktx:2.5.0"
@@ -108,7 +116,9 @@ object Libs {
         const val flowlayouts = "com.google.accompanist:accompanist-flowlayout:$version"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
         const val permissions = "com.google.accompanist:accompanist-permissions:$version"
-        const val navigationAnimation = "com.google.accompanist:accompanist-navigation-animation:$version"
+        const val navigationAnimation =
+            "com.google.accompanist:accompanist-navigation-animation:$version"
+        const val swipeRefresh = "com.google.accompanist:accompanist-swiperefresh:$version"
     }
 
 

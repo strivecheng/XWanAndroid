@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.strive.xwanandroid.service.HomeService
 import com.strive.xwanandroid.ui.home.data.HomeAllDataInfo
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
@@ -13,6 +16,10 @@ import kotlinx.coroutines.launch
  * @description
  */
 class HomeViewModel(private val homeService: HomeService) : ViewModel() {
+    private val _isRefreshing = MutableStateFlow(false)
+
+    val isRefreshing: StateFlow<Boolean>
+        get() = _isRefreshing.asStateFlow()
 
     init {
         fetchHomeAllData()
@@ -23,20 +30,26 @@ class HomeViewModel(private val homeService: HomeService) : ViewModel() {
         homeService.homeTopArticleListFlow,
         homeService.homeHotArticleListFlow,
     ) { homeBanner, homeTopArticle, homeHotArticle ->
-        HomePageViewState.ShowHomeAndData(
+        _isRefreshing.value = false
+        HomePageViewState.ShowHomeAllData(
             homeAllDataInfo = HomeAllDataInfo(
                 homeBanner,
                 homeTopArticle,
-                homeHotArticle.datas
+                homeHotArticle.datas,
             )
         )
     }
 
     fun fetchHomeAllData() {
+        _isRefreshing.value = true
         viewModelScope.launch {
             homeService.fetchHomeTopArticle()
             homeService.fetchHomeHotArticle(0)
             homeService.fetchHomeBanner()
         }
+    }
+
+    fun finishRefresh() {
+        _isRefreshing.value = false
     }
 }

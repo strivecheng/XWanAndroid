@@ -21,9 +21,15 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun StriveTheme(isDarkMode: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val porscheColors = remember(isDarkMode) { if (isDarkMode) darkColors else lightColors }
+    val striveColors = remember(isDarkMode) { if (isDarkMode) darkColors else lightColors }
     val materialColors = remember(isDarkMode) { getMaterialColors(isDarkMode) }
 //    val porscheSwitchColors = remember(porscheColors) { getPorscheSwitchColors(porscheColors) }
+
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = !isSystemInDarkTheme()
+    SideEffect {
+        systemUiController.setSystemBarsColor(striveColors.background, darkIcons = useDarkIcons)
+    }
 
     val materialShapes = remember {
         Shapes(
@@ -46,12 +52,6 @@ fun StriveTheme(isDarkMode: Boolean = isSystemInDarkTheme(), content: @Composabl
         )
     }
 
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = !isSystemInDarkTheme()
-    SideEffect {
-        systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
-    }
-
     MaterialTheme(
         colors = materialColors,
         typography = materialTypography,
@@ -60,7 +60,7 @@ fun StriveTheme(isDarkMode: Boolean = isSystemInDarkTheme(), content: @Composabl
         CompositionLocalProvider(
             LocalContentColor provides MaterialTheme.colors.onBackground,
             LocalContentAlpha provides 1f,
-            LocalPorscheColors provides porscheColors,
+            LocalPorscheColors provides striveColors,
 //            LocalPorscheSwitchColors provides porscheSwitchColors,
 //            LocalRippleTheme provides PorscheRippleTheme,
             content = content

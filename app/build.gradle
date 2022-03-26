@@ -67,8 +67,6 @@ dependencies {
     implementation Libs.Coil.coilCompose
 
 
-
-
     implementation Libs.AndroidX.browser
     implementation Libs.AndroidX.Navigation.compose
     implementation Libs.AndroidX.Compose.ui
@@ -77,8 +75,12 @@ dependencies {
     implementation Libs.AndroidX.Compose.uiToolingPreview
     implementation Libs.AndroidX.Lifecycle.lifecycleKtx
     implementation Libs.AndroidX.activityComposeKtx
+    implementation Libs.AndroidX.Paging.compose
+    implementation Libs.AndroidX.Paging.runtime
+
     implementation Libs.Accompanist.systemUiController
     implementation Libs.Accompanist.insets
+    implementation Libs.Accompanist.swipeRefresh
 
     testImplementation Libs.junit
     testImplementation Libs.extJunit

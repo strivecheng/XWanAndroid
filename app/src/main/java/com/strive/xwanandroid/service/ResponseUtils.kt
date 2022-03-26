@@ -12,7 +12,7 @@ import io.ktor.http.isSuccess
  */
 internal suspend inline fun <reified DTO> receiveWanAndroidBffResult(
     block: () -> HttpResponse
-): WanAndroidBffResult<DTO> {
+): WanAndroidBffResult<DTO> = runCatchingOrError {
     val response = block()
     return if (response.status.isSuccess()) {
         // Try to parse the response

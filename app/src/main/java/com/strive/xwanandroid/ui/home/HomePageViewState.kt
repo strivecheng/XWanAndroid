@@ -10,5 +10,6 @@ import com.strive.xwanandroid.ui.home.data.HomeAllDataInfo
 
 internal sealed class HomePageViewState {
     object Default : HomePageViewState()
-    data class ShowHomeAndData(val homeAllDataInfo: HomeAllDataInfo) : HomePageViewState()
+    data class ShowHomeAllData(val homeAllDataInfo: HomeAllDataInfo) :
+        HomePageViewState()
 }
